@@ -1,19 +1,19 @@
 # 📊 Hotel Booking Cancellation Prediction
 
-Dự án này sử dụng Python để phân tích dữ liệu khách hàng, từ đó tính toán các chỉ số marketing quan trọng và dự đoán hành vi mua hàng trong tương lai.
+This project uses Python to analyze customer data, calculate important marketing metrics, and predict future purchasing behavior.
 
-## 1. Thành viên nhóm & Phân công công việc
+## 1. Team Members & Task Allocation
 
-Dự án được thực hiện bởi nhóm 2, với sự đóng góp cụ thể của từng thành viên như sau:
+This project was carried out by Group 2, with specific contributions from each member as follows:
 
-| Họ và Tên | Vai trò | Chi tiết công việc thực hiện |
+| Full Name | Role | Details of Work Performed |
 | :--- | :--- | :--- |
-| **Trần Phước Duy** | Trưởng nhóm / Machine Learning Engineer | Tìm kiếm dữ liệu, lên ý tưởng, chỉnh sửa nội dung và viết file `04_Model_Training.ipynb` chạy thuật toán phân đoán và tổng hợp kết quả độ chính xác. |
-| **Nguyễn Phương Anh 2** | Feature Engineer | Viết file `03_Feature_Engineering_and_Preprocessing.ipynb`, hỗ trợ làm file `04_Model_Training.ipynb`, tạo ra các features mới, làm scaling, build pipeline and time-based split |
-| **Nguyễn Hoàng Lê Khánh** | Data Engineer | Phụ trách file `01_Cleaning.ipynb`, xử lý missing values, loại bỏ leakage data và xuất ra file data chuẩn. |
-| **Cao Đức Mạnh** | Data Analyst | Tìm kiếm dữ liệu, viết file `02_EDA.ipynb`, phân tích các insight và đưa ra các actions cần thiết |
+| **Trần Phước Duy** | Team Leader / Machine Learning Engineer | Searched for data, came up with ideas, edited content and wrote the `04_Model_Training.ipynb` file to run the prediction algorithm and summarize accuracy results. |
+| **Nguyễn Phương Anh 2** | Feature Engineer | Wrote the `03_Feature_Engineering_and_Preprocessing.ipynb` file, supported the `04_Model_Training.ipynb` file, created new features, performed scaling, built the pipeline and time-based split. |
+| **Nguyễn Hoàng Lê Khánh** | Data Engineer | Responsible for the `01_Cleaning.ipynb` file, handled missing values, removed leakage data and exported a clean dataset. |
+| **Cao Đức Mạnh** | Data Analyst | Searched for data, wrote the `02_EDA.ipynb` file, analyzed insights and proposed necessary actions. |
 
-## 2. Cấu trúc Repository 
+## 2. Repository Structure
 
 ```bash
 .
@@ -84,7 +84,7 @@ Raw Hotel Bookings  ──►  Data Cleaning & Logic Fixing
 - Model Evaluation & Comparison: Evaluated all models on the unseen test set using comprehensive metrics: ROC-AUC, Recall, Precision, F1-score, Log Loss, and Brier Score. Analyzed trade-offs and selected the best-performing models for different business priorities.
 ... 
 
-## 3. Nguồn dữ liệu (Data Source)
+## 3. Data Source
 - **Source:** [Hotel Booking Demand — Kaggle](https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand)
 - **Total observations (rows):** 119,390
 - **Total attributes (columns):** 32 *(original)* → **11 features** after selection & engineering
@@ -136,6 +136,7 @@ A missed cancellation (False Negative) means a room is blocked and revenue is lo
 
 
 ## 5. Model Comparison (Test Set: May–Aug 2017, n ≈ 22,177)
+### 5.1. Models Results
 | Model | Accuracy | Precision | Recall | F1-score | ROC-AUC | Log Loss | Brier Score |
 |---|---|---|---|---|---|---|---|
 | Baseline LR | 0.6874 | 0.6039 | 0.3247 | 0.4223 | 0.7133 | 0.5734 | 0.1983 |
@@ -144,42 +145,63 @@ A missed cancellation (False Negative) means a room is blocked and revenue is lo
 | Random Forest | 0.6756 | 0.5263 | 0.7857 | 0.6303 | 0.7727 | 0.5925 | 0.2045 |
 | Gradient Boosting | 0.7205 | 0.6509 | 0.4439 | 0.5278 | 0.7759 | 0.5346 | 0.1828 |
 
-## 6. Kết quả nổi bật (Key Findings)
+---
+### 5.2. Improvement vs Baseline LG
+| Model | Accuracy | Precision | Recall | F1 | ROC-AUC | Log Loss | Brier |
+|---|---|---|---|---|---|---|---|
+| Engineered LR | +5.4% | +6.4% | +51.2% | +31.8% | +8.0% | +6.6% | +8.6% |
+| Tuned LR | -7.6% | -19.0% | +160.4% | +46.8% | +7.9% | -7.6% | -10.4% |
+| Random Forest | -1.7% | -12.9% | +141.8% | +49.2% | +8.3% | -3.3% | -3.1% |
+| Gradient Boosting | +4.8% | +7.8% | +36.6% | +24.9% | +8.8% | +6.8% | +7.8% |
 
-### Về dữ liệu & Insight kinh doanh
-
-- Tỷ lệ hủy đặt phòng sau khi làm sạch dữ liệu là **28.4%**.
-- **`deposit_type = Non Refund`** là yếu tố mạnh nhất: nhóm khách hàng đặt cọc không hoàn tiền có tỷ lệ hủy cực cao (gần 100% trong nhiều trường hợp).
-- Khách hàng đặt phòng trước thời gian dài (**lead_time cao**) có nguy cơ hủy cao hơn rõ rệt. Ngược lại, booking ngắn hạn (`is_short_lead`) thường ổn định hơn.
-- Khách hàng yêu cầu **nhiều special requests** hoặc **cần chỗ đỗ xe** có xu hướng giữ booking cao hơn (cam kết mạnh).
-- `market_segment` và `distribution_channel` có mối tương quan rất cao (0.89), cho thấy có thể giữ một trong hai để tránh đa cộng tuyến.
-- Khách hàng có lịch sử hủy trước đó (`prior_cancel_rate` cao) tiếp tục có xu hướng hủy cao hơn ở các lần sau.
-
-### Kết quả Hypothesis Testing
-- Tất cả **11 features** được chọn đều có ý nghĩa thống kê mạnh (p-value < 0.05).
-- Các biến số (`lead_time`, `adr`, `total_of_special_requests`, ...) đều khác biệt rõ rệt giữa nhóm hủy và không hủy theo kiểm định Mann-Whitney U.
-- Tất cả biến phân loại đều có mối liên hệ có ý nghĩa với `is_canceled` theo kiểm định Chi-square.
-
-### Về mô hình
-
-- **Feature Engineering** mang lại cải thiện đáng kể: tăng **+0.057 ROC-AUC** so với Baseline.
-- **Gradient Boosting** là mô hình tốt nhất về khả năng xếp hạng với **ROC-AUC = 0.776**.
-- **Tuned Logistic Regression** đạt **Recall cao nhất (0.846)**, rất phù hợp cho mục tiêu kinh doanh ưu tiên giảm thiểu mất phòng do bỏ sót booking bị hủy.
-- Mô hình tốt nhất cải thiện mạnh so với Baseline:
-  - ROC-AUC: **+0.063**
-  - Recall: **+0.521** (từ 0.325 lên 0.846)
-
-### Bảng tóm tắt hiệu suất trên Test Set (05–08/2017)
-
-| Model                  | ROC-AUC | Recall  | Precision | F1     | Ghi chú |
-|------------------------|---------|---------|-----------|--------|---------|
-| Baseline LR            | 0.713   | 0.325   | 0.604     | 0.422  | Mô hình tham chiếu |
-| Tuned LR               | 0.770   | **0.846** | 0.489   | 0.620  | Recall cao nhất |
-| **Gradient Boosting**  | **0.776** | 0.444 | **0.651** | 0.528  | AUC & Precision tốt nhất |
+Percentages show change relative to **Baseline LR**.  
+For **Log Loss** and **Brier**, the sign is flipped so positive values still indicate better performance.
 
 ---
+### 5.3. Step-by-Step Pipeline Lift
+| Stage | What was added | ROC-AUC | Δ AUC | Recall | Δ Recall |
+|---|---|---|---|---|---|
+| Baseline LR | Raw numeric features only, no scaling, no tuning | 0.7133 | — | 0.3249 | — |
+| Engineered LR | Full feature engineering + preprocessing pipeline | 0.7703 | +0.0570 | 0.4911 | +0.1662 |
+| Tuned LR | Optuna hyperparameter tuning (40 trials) | 0.7700 | -0.0003 | 0.8462 | +0.3551 |
+| Random Forest | Ensemble: 200 trees, balanced class weight | 0.7727 | +0.0027 | 0.7857 | -0.0605 |
+| Gradient Boosting | Ensemble: 300 iterations, histogram GBM | 0.7759 | +0.0032 | 0.4439 | -0.3418 |
 
-## 5. Hướng dẫn chạy code (How to run)
+---
+## 6. Key Findings
+
+### About the Data & Business Insights
+
+- The cancellation rate after data cleaning is **28.4%**.
+- **`deposit_type = Non Refund`** is the strongest factor: customers who made non-refundable deposits have an extremely high cancellation rate (nearly 100% in many cases).
+- Customers who book far in advance (**high lead_time**) have a significantly higher risk of cancellation. Conversely, short-term bookings (`is_short_lead`) tend to be more stable.
+- Customers who make **many special requests** or **require parking spaces** are more likely to keep their bookings (stronger commitment).
+- Customers with a history of cancellations (`prior_cancel_rate` high) continue to have a higher tendency to cancel in subsequent bookings.
+
+### Hypothesis Testing Results
+- All **11 selected features** are statistically significant (p-value < 0.05).
+- Numerical variables (`lead_time`, `adr`, `total_of_special_requests`, ...) show clear differences between the canceled and non-canceled groups according to the Mann-Whitney U test.
+- All categorical variables have a significant relationship with `is_canceled` according to the Chi-square test.
+
+### About the Models
+
+- **Feature Engineering** brought significant improvement: an increase of **+0.057 ROC-AUC** compared to the Baseline.
+- **Gradient Boosting** is the best model in terms of ranking ability with **ROC-AUC = 0.776**.
+- **Tuned Logistic Regression** achieved the **highest Recall (0.846)**, which is very suitable for business goals that prioritize minimizing lost rooms due to missed cancellations.
+- The best model shows strong improvement over the Baseline:
+  - ROC-AUC: **+0.063**
+  - Recall: **+0.521** (from 0.325 to 0.846)
+
+### Summary of Performance on Test Set (05–08/2017)
+
+| Model                  | ROC-AUC | Recall  | Precision | F1     | Note |
+|------------------------|---------|---------|-----------|--------|---------|
+| Baseline LR            | 0.713   | 0.325   | 0.604     | 0.422  | Reference model |
+| Tuned LR               | 0.770   | **0.846** | 0.489   | 0.620  | Highest Recall |
+| **Gradient Boosting**  | **0.776** | 0.444 | **0.651** | 0.528  | Best AUC & Precision |
+---
+
+## 5. How to run
 
 ### Prerequisites
 
