@@ -1,0 +1,10 @@
+{
+  "C": 2.102299408388136,
+  "class_weight": "balanced",
+  "max_iter": 1000,
+  "penalty": "l2",
+  "solver": "lbfgs",
+  "random_state": 42,
+  "val_roc_auc": 0.7985,
+  "test_roc_auc": 0.7699
+}
